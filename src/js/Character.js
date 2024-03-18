@@ -5,18 +5,26 @@ export default class Character {
   }
 
   get attack() {
-    return Math.floor(this._attack - (this._cell - 1) * 10);
+    const distanceFactor = 1 - (this._cell - 1) * 0.1;
+    let attack = this._attack * distanceFactor;
+
+    if (this._stoned) {
+      const stonedModifier = Math.log2(this._cell) * 5;
+      attack = Math.max(attack - stonedModifier, 0);
+    }
+
+    return Math.round(Math.max(attack, 0));
+  }
+
+  set attack(value) {
+    this._attack = value;
   }
 
   get stoned() {
-    return Math.floor(this.attack - Math.log2(this._cell) * 5);
+    return this._stoned;
   }
 
-  set attack(attack) {
-    this._attack = attack;
-  }
-
-  set stoned(stoned) {
-    this._stoned = stoned;
+  set stoned(value) {
+    this._stoned = value;
   }
 }
